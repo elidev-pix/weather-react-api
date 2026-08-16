@@ -5,7 +5,7 @@ const MESSAGES = {
   [STATUS.NOT_FOUND]: { icon: '🤷', text: "Ville introuvable. Vérifie l'orthographe." },
   [STATUS.API_ERROR]: { icon: '⚠️', text: "Une erreur est survenue côté serveur météo." },
   [STATUS.NETWORK_ERROR]: { icon: '📡', text: 'Problème de connexion réseau. Réessaie.' },
-  [STATUS.INVALID_KEY]: { icon: '🔑', text: "Clé API manquante ou invalide (vérifie ton fichier .env)." },
+  [STATUS.INVALID_KEY]: { icon: '🔑', text: "Clé API manquante ou invalide ." },
   [STATUS.EMPTY_QUERY]: { icon: '✍️', text: 'Le champ de recherche est vide.' },
 }
 
