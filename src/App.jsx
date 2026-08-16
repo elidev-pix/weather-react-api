@@ -1,69 +1,78 @@
 import { useEffect, useState } from 'react'
+import { STATUS, useWeather } from './hooks/useWeather'
+import { useFavorites } from './hooks/useFavorites'
+import { getWeatherTheme } from './utils/weatherTheme'
 
-const api = {
-    key : import.meta.env.API_KEY,
-    base : import.meta.env.API_BASE
-  }
+import Header from './components/Header'
+import SearchBar from './components/SearchBar'
+import LocationInfo from './components/LocationInfo'
+import WeatherCard from './components/WeatherCard'
+import WeatherDetails from './components/WeatherDetails'
+import FavoritesBar from './components/FavoritesBar'
+import Controls from './components/Controls'
+import StatusMessage from './components/StatusMessage'
 
 function App() {
+  const { weather, status, lastUpdated, currentCity, searchCity, useMyPosition, refresh } =
+    useWeather('Ouagadougou')
+  const { history, favorites, pushHistory, toggleFavorite, isFavorite } = useFavorites()
 
-  const [search, setSearch] = useState("Ouagadougou");
-  const [weather, setWeather] = useState({})
+  const [unit, setUnit] = useState('C')
+  const [darkMode, setDarkMode] = useState(false)
 
-  const searchPressed = (city = "Ouagadougou") => {
-    fetch(`${api.base}weather?q=${search}&units=metric&APPID=${api.key}&lang=fr`)
-    .then( response => response.json())
-    .then(result => {
-      setWeather(result);
-      console.log(result)
-    });
-  }
+  // Ajoute la ville à l'historique dès qu'une recherche réussit
+  useEffect(() => {
+    if (status === STATUS.SUCCESS && weather?.name) {
+      pushHistory(weather.name)
+    }
+  }, [status, weather, pushHistory])
 
-   useEffect(() => {
-    searchPressed()
-  }, [])
+  const handleSearch = (city) => searchCity(city)
+  const toggleUnit = () => setUnit((u) => (u === 'C' ? 'F' : 'C'))
+  const toggleDarkMode = () => setDarkMode((d) => !d)
+
+  const isSuccess = status === STATUS.SUCCESS && weather
+  const isLoading = status === STATUS.LOADING
+
+  const theme = isSuccess ? getWeatherTheme(weather) : { gradient: 'from-blue-500 via-blue-600 to-orange-400' }
 
   return (
-    <div className='min-h-screen justify-center items-center '>
-      <div className="flex flex-col px-2 py-3 rounded-md justify-center items-center">
-        <div className="flex flex-col">
-          <div className="flex gap-2">
-            <a href='https://github.com/elidev-pix'>elidev-pix</a>
-            <span>Weather App</span>
+    <div className={darkMode ? 'dark' : ''}>
+      <div
+        className={`min-h-screen w-full bg-gradient-to-br ${theme.gradient} dark:from-slate-950 dark:via-blue-950 dark:to-slate-900 transition-colors duration-700`}
+      >
+        <div className="min-h-screen w-full flex justify-center px-4 py-6 sm:py-10">
+          <div className="w-full max-w-md flex flex-col gap-5">
+            <div className="flex justify-center items-center">
+              <span className="text-4xl font-light text-white/80">Weather App</span>
+            </div>
+            <Header darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />
+
+            <SearchBar onSearch={handleSearch} onUseMyPosition={useMyPosition} isLoading={isLoading} />
+
+            {isSuccess && <LocationInfo weather={weather} />}
+
+            {isSuccess ? (
+              <WeatherCard
+                weather={weather}
+                unit={unit}
+                isFavorite={isFavorite(currentCity)}
+                onToggleFavorite={() => toggleFavorite(currentCity)}
+              />
+            ) : (
+              <StatusMessage status={status} />
+            )}
+
+            {isSuccess && <WeatherDetails weather={weather} />}
+
+            {isSuccess && (
+              <Controls unit={unit} onToggleUnit={toggleUnit} onRefresh={refresh} lastUpdated={lastUpdated} isLoading={isLoading} />
+            )}
+
+            <FavoritesBar history={history} favorites={favorites} onSelect={handleSearch} />
           </div>
-          <span className="italic">A React-powered weather application built with real-time weather APIs</span>
         </div>
-        <div className="flex flex-col">
-          <div className="flex">
-            <input 
-              type="text" 
-              placeholder="Rechercher"
-              onChange={(e)=>setSearch(e.target.value)}
-            />
-            <button 
-              className=""
-              onClick={searchPressed}
-            >
-              Rechercher...
-            </button>
-          </div>
-          
-
-          <p>Ville : {weather.name ?? ""}</p>
-          <p>Pays : {weather.sys?.country ?? ""}</p>
-
-          <span>Latitude : {weather.coord?.lat ?? ""}</span>
-          <span>Longitude : {weather.coord?.lon ?? ""}</span>
-
-          <p>Température : {weather.main?.temp ?? ""}</p>
-
-          <p>{weather.weather?.[0]?.main ?? ""}</p>
-          <p>{weather.weather?.[0]?.description ?? ""}</p>
-
-        </div>
-        
       </div>
-
     </div>
   )
 }
