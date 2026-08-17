@@ -48,6 +48,7 @@ function App() {
               <span className="text-lg font-semibold text-white group-hover:text-orange-300 transition-colors">
                 elidev-pix
               </span>
+              <span className="text-xs italic text-white/60">Real-time weather ⚡</span>
             </div>
             <Header darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />
 

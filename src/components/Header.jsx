@@ -9,18 +9,18 @@ function Header({ darkMode, onToggleDarkMode }) {
           className="flex items-baseline gap-2 group"
         >
         </a>
-        <span className="text-xs italic text-white/60">Real-time weather ⚡</span>
+        
       </div>
 
       
       <div className="mt-2 text-xs text-white/40">
-        <span>React</span>
+        <span>React.Js</span>
         <span className="mx-1">•</span>
         <span>Tailwind CSS</span>
         <span className="mx-1">•</span>
         <span>OpenWeather API</span>
         <span className="mx-1">•</span>
-        <span>Claude pour le design final</span>
+        <span>Claude Code pour le design final</span>
         <span className="mx-1">•</span>
         <span>Vercel pour le déploiement</span>
       </div>
