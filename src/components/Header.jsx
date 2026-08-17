@@ -8,9 +8,6 @@ function Header({ darkMode, onToggleDarkMode }) {
           rel="noopener noreferrer"
           className="flex items-baseline gap-2 group"
         >
-          <span className="text-lg font-semibold text-white group-hover:text-orange-300 transition-colors">
-            elidev-pix
-          </span>
         </a>
         <span className="text-xs italic text-white/60">Real-time weather ⚡</span>
       </div>
@@ -25,7 +22,7 @@ function Header({ darkMode, onToggleDarkMode }) {
         <span className="mx-1">•</span>
         <span>Claude pour le design final</span>
         <span className="mx-1">•</span>
-        <span>Vercel</span>
+        <span>Vercel pour le déploiement</span>
       </div>
 
       <button

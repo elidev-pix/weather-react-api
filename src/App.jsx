@@ -43,8 +43,11 @@ function App() {
       >
         <div className="min-h-screen w-full flex justify-center px-4 py-6 sm:py-10">
           <div className="w-full max-w-md flex flex-col gap-5">
-            <div className="flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
               <span className="text-4xl font-light text-white/80">Weather App</span>
+              <span className="text-lg font-semibold text-white group-hover:text-orange-300 transition-colors">
+                elidev-pix
+              </span>
             </div>
             <Header darkMode={darkMode} onToggleDarkMode={toggleDarkMode} />
 
